@@ -15,3 +15,5 @@ export interface Property {
 }
 
 export type Category = 'All' | 'Luxury' | 'City' | 'Beachfront' | 'Mountain';
+
+export type View = 'home' | 'property-detail' | 'agents' | 'services' | 'contact';
