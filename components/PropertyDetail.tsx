@@ -1,6 +1,6 @@
-
-import React, { useEffect, useState } from 'react';
-import { Property } from '../types';
+import React from 'react';
+import ImmersiveViewer from './ImmersiveViewer';
+import { Property } from '@/types';
 
 interface PropertyDetailProps {
   property: Property;
@@ -8,21 +8,10 @@ interface PropertyDetailProps {
 }
 
 const PropertyDetail: React.FC<PropertyDetailProps> = ({ property, onBack }) => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, [property]);
-
-  const handleAutoTour = () => {
-    window.open("https://www.youtube.com/watch?v=SId9b456GzM", "_blank");
-  };
-
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen pt-20 md:pt-0">
       {/* Back button and Breadcrumb */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-4 md:py-6">
         <button 
           onClick={onBack}
           className="flex items-center gap-2 text-slate-500 hover:text-[#1a365d] transition-colors font-semibold group"
@@ -58,61 +47,10 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({ property, onBack }) => 
       {/* Hero Experience (The "3D Tour") */}
       <div className="container mx-auto px-0 md:px-4 mb-12">
         <div className="relative aspect-[16/9] bg-slate-950 md:rounded-3xl overflow-hidden shadow-2xl flex items-center justify-center">
-          {loading ? (
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-[#d4af37] border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-[#d4af37] font-medium tracking-widest animate-pulse text-sm">LOADING LUXEVR™ EXPERIENCE...</p>
-            </div>
-          ) : (
-            <>
-              {/* Simulated 3D Viewer Background */}
-              <div 
-                className="absolute inset-0 opacity-40 blur-sm scale-110"
-                style={{ backgroundImage: `url('${property.imageUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-              ></div>
-              
-              <div className="relative z-10 text-center text-white p-6 md:p-8 max-w-lg">
-                <div className="mb-4 md:mb-6 inline-block p-5 md:p-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                  <i className="fas fa-vr-cardboard text-5xl md:text-6xl text-[#d4af37]"></i>
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">Live 3D Walkthrough</h3>
-                <p className="text-slate-300 font-light text-sm md:text-lg mb-8 leading-relaxed px-4">
-                  Experience true spatial awareness. Navigate through rooms with high-precision photogrammetry.
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                   <button 
-                    onClick={handleAutoTour}
-                    className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full border border-white/30 transition-all font-bold shadow-lg text-sm"
-                   >
-                    <i className="fas fa-play mr-2"></i> Auto-Guided Tour
-                   </button>
-                   <button className="bg-[#d4af37] text-[#1a365d] px-8 py-3 rounded-full font-black transition-all shadow-xl hover:-translate-y-1 text-sm">
-                    <i className="fas fa-expand mr-2"></i> Fullscreen Mode
-                   </button>
-                </div>
-              </div>
-
-              {/* Viewer Tools HUD */}
-              <div className="absolute top-6 right-6 flex flex-col gap-3">
-                 <button className="w-10 h-10 bg-black/60 backdrop-blur-md rounded-lg flex items-center justify-center text-white hover:bg-[#d4af37] hover:text-[#1a365d] transition-all shadow-lg"><i className="fas fa-map"></i></button>
-                 <button className="w-10 h-10 bg-black/60 backdrop-blur-md rounded-lg flex items-center justify-center text-white hover:bg-[#d4af37] hover:text-[#1a365d] transition-all shadow-lg"><i className="fas fa-ruler"></i></button>
-              </div>
-
-              {/* Viewer Navigation Bar */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 md:gap-4 bg-black/50 backdrop-blur-2xl px-6 md:px-8 py-3 md:py-4 rounded-full border border-white/20 shadow-2xl scale-90 md:scale-100">
-                <button title="Rotate Left" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-undo"></i></button>
-                <div className="h-6 w-px bg-white/20"></div>
-                <div className="flex gap-2">
-                  <button title="Look Left" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-arrow-left"></i></button>
-                  <button title="Look Up" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-arrow-up"></i></button>
-                  <button title="Look Down" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-arrow-down"></i></button>
-                  <button title="Look Right" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-arrow-right"></i></button>
-                </div>
-                <div className="h-6 w-px bg-white/20"></div>
-                <button title="Rotate Right" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 text-white transition-all"><i className="fas fa-redo"></i></button>
-              </div>
-            </>
-          )}
+          <ImmersiveViewer 
+            property={property} 
+            showDescriptionButton={false} 
+          />
         </div>
       </div>
 
