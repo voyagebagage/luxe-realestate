@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Filters from './components/Filters';
 import PropertyCard from './components/PropertyCard';
 import PropertyDetail from './components/PropertyDetail';
+import TourModal from './components/TourModal';
 import Footer from './components/Footer';
 import AIAssistant from './components/AIAssistant';
 import { properties } from './data';
@@ -14,6 +15,7 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedCategory, setSelectedCategory] = useState<Category>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeModalProperty, setActiveModalProperty] = useState<Property | null>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   // Scroll to top on view change
@@ -32,7 +34,12 @@ const App: React.FC = () => {
   }, [selectedCategory, searchQuery]);
 
   const handlePropertyClick = (property: Property) => {
+    setActiveModalProperty(property);
+  };
+
+  const handleGoToDescription = (property: Property) => {
     setSelectedProperty(property);
+    setActiveModalProperty(null);
     setCurrentView('property-detail');
   };
 
@@ -41,6 +48,7 @@ const App: React.FC = () => {
     if (view !== 'property-detail') {
       setSelectedProperty(null);
     }
+    setActiveModalProperty(null);
   };
 
   const renderContent = () => {
@@ -153,6 +161,14 @@ const App: React.FC = () => {
       <main className="flex-grow">
         {renderContent()}
       </main>
+
+      {activeModalProperty && (
+        <TourModal 
+          property={activeModalProperty} 
+          onClose={() => setActiveModalProperty(null)}
+          onGoToDescription={() => handleGoToDescription(activeModalProperty)}
+        />
+      )}
 
       <Footer />
       <AIAssistant />
